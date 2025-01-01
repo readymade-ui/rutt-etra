@@ -192,9 +192,9 @@ export class Synth {
   // animate on every requestAnimationFrame
   animate() {
     const time = performance.now();
-    this.texture && (this.texture.needsUpdate = true);
-    this.material && (this.material.needsUpdate = true);
-    this.material && (this.material.wireframe = true);
+    if (this.texture) this.texture.needsUpdate = true;
+    if (this.material) this.material.needsUpdate = true;
+    if (this.material) this.material.wireframe = true;
     this.mesh.scale.x = this.mesh.scale.y = 10.0;
     this.camera.lookAt(this.mesh.position);
     this.key.target = this.mesh;
