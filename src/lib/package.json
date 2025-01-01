@@ -1,0 +1,20 @@
+{
+  "name": "@readymade/rutt-etra",
+  "version": "1.0.0",
+  "description": "GLSL shader compatible with WebGL that displays an effect similar to the analog Rutt/Etra video synthesizer.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "glsl",
+    "shader",
+    "webgl",
+    "three.js",
+    "three",
+    "babylonjs",
+    "3d"
+  ],
+  "author": "Stephen Belovarich",
+  "license": "MIT"
+}
