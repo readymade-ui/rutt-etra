@@ -27,6 +27,7 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass';
 
 import { RuttEtraShader } from './shaders/RuttEtraShader';
 import { PostProcessor, Processor, StageEquipment } from './types';
+import { RdControlSurface } from '@readymade/ui';
 
 // parses and sorts post processing passes
 export function postProcess(processor: PostProcessor) {
@@ -53,12 +54,10 @@ export function construct(equipment: StageEquipment, scene: Scene) {
 }
 
 export class Synth {
-  // elements
   container: Element;
-  // inputs
   videoInput: HTMLVideoElement;
-  width = 640;
-  height = 480;
+  width: number;
+  height: number;
   scene: Scene;
   geometry: PlaneGeometry | BufferGeometry;
   material: ShaderMaterial;
@@ -67,11 +66,21 @@ export class Synth {
   equipment: StageEquipment;
   processor: Processor;
   postProcessor: PostProcessor;
+  channel: BroadcastChannel;
+  controlSurface: RdControlSurface;
 
-  constructor(container: Element, videoInput: HTMLVideoElement) {
+  constructor(
+    container: Element,
+    videoInput: HTMLVideoElement,
+    controlSurface: RdControlSurface,
+  ) {
     // set dom elements for canvas and video
     this.container = container;
     this.videoInput = videoInput;
+    this.width = 640;
+    this.height = 480;
+    this.controlSurface = controlSurface;
+    this.channel = new BroadcastChannel('synth');
 
     // initialize scene
     this.scene = new Scene();
@@ -201,6 +210,8 @@ export class Synth {
     // handle window events
     window.addEventListener('resize', this.onWindowResize.bind(this), false);
 
+    this.channel.onmessage = this.onMessage.bind(this);
+
     // handle window events
     this.container.appendChild(this.processor.renderer.domElement);
   }
@@ -236,6 +247,17 @@ export class Synth {
       blending: AdditiveBlending,
     });
     this.mesh = new Mesh(this.geometry, this.material);
+    if (this.controlSurface.controls.length) {
+      for (const controlMeta of this.controlSurface.controls) {
+        console.log(controlMeta.control);
+        this.onMessage({
+          data: {
+            name: controlMeta.control.name,
+            currentValue: controlMeta.control.currentValue,
+          },
+        });
+      }
+    }
     this.scene.add(this.mesh);
   }
   // animate on every requestAnimationFrame
@@ -258,5 +280,50 @@ export class Synth {
     this.processor.renderer
       .getRenderTarget()
       .setSize(window.innerWidth, window.innerHeight);
+  }
+  onMessage(event) {
+    switch (event.data.name) {
+      case 'displacement':
+        this.material.uniforms['displace'].value = event.data.currentValue;
+        break;
+      case 'multiplier':
+        this.material.uniforms['multiplier'].value = event.data.currentValue;
+        break;
+      case 'origin-xy':
+        this.material.uniforms['originX'].value = event.data.currentValue[0];
+        this.material.uniforms['originY'].value = event.data.currentValue[1];
+        break;
+      case 'origin-z':
+        this.material.uniforms['originZ'].value = event.data.currentValue;
+        break;
+      case 'opacity':
+        this.material.uniforms['opacity'].value = event.data.currentValue;
+        break;
+      case 'line-offset':
+        this.material.uniforms['lineOffset'].value = event.data.currentValue;
+        break;
+      case 'line-width':
+        this.material.uniforms['lineWidth'].value = event.data.currentValue;
+        break;
+      case 'orientation':
+        if (event.data.currentValue === 'Vertical') {
+          this.material.uniforms['lineOrientation'].value = 1;
+        }
+        if (event.data.currentValue === 'Horizontal') {
+          this.material.uniforms['lineOrientation'].value = 0;
+        }
+        break;
+      case 'mode':
+        if (event.data.currentValue === 'Vector') {
+          this.material.uniforms['mode'].value = 1;
+        }
+        if (event.data.currentValue === 'Scanline') {
+          this.material.uniforms['mode'].value = 0;
+        }
+        break;
+      default:
+        console.log('Unknown control:', event.data.name);
+        break;
+    }
   }
 }

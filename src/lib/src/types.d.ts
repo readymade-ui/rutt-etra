@@ -31,19 +31,19 @@ export interface StageElements {
   geometry?: {
     [key: string]: {
       element: PlaneGeometry | BufferGeometry;
-      callback?: (element: PlaneGeometry | BufferGeometry) => typeof element;
+      step?: (element: PlaneGeometry | BufferGeometry) => typeof element;
     };
   };
   material?: {
     [key: string]: {
       element: Partial<ShaderMaterialParameters>;
-      callback?: (element: Partial<ShaderMaterialParameters>) => typeof element;
+      step?: (element: Partial<ShaderMaterialParameters>) => typeof element;
     };
   };
   texture?: {
     [key: string]: {
       element: Partial<VideoTexture | Texture>;
-      callback?: (element: Partial<VideoTexture | Texture>) => typeof element;
+      step?: (element: Partial<VideoTexture | Texture>) => typeof element;
     };
   };
   mesh?: {
@@ -51,7 +51,7 @@ export interface StageElements {
       geometry: string;
       material?: string;
       position?: Vector3;
-      callback?: (element: Partial<Mesh>) => typeof element;
+      step?: (element: Partial<Mesh>) => typeof element;
     };
   };
 }
@@ -60,13 +60,15 @@ export interface StageEquipment {
   camera?: {
     [key: string]: {
       element: OrthographicCamera | PerspectiveCamera;
-      position?: Vector3;
+      step?: (
+        element: OrthographicCamera | PerspectiveCamera,
+      ) => typeof element;
     };
   };
   light?: {
     [key: string]: {
       element: AmbientLight | SpotLight;
-      position?: Vector3;
+      step?: (element: AmbientLight | SpotLight) => typeof element;
     };
   };
 }

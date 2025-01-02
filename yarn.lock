@@ -770,14 +770,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@readymade/core@npm:^3.1.0":
+"@readymade/core@npm:^3.1.1":
   version: 3.1.1
   resolution: "@readymade/core@npm:3.1.1"
   checksum: 10c0/566cc835293aeacf48258db1a81a64fa990529c0ae7cc8ad7d7fefe47220624b5b482984fc1fc4d88d0647b7faedc6e99edc5e97443df6ffbdccff12c25000c9
   languageName: node
   linkType: hard
 
-"@readymade/dom@npm:^3.1.0":
+"@readymade/dom@npm:^3.1.1":
   version: 3.1.1
   resolution: "@readymade/dom@npm:3.1.1"
   checksum: 10c0/ab0e531bef685b3bbb2c5040dc95de916cff97956fed79922302a4af59360ada460fc09aeab22f15b64ca0e3abef18f9bd55d551604038b12cc9ce8061f485e2
@@ -795,7 +795,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@readymade/router@npm:^3.1.0":
+"@readymade/router@npm:^3.1.1":
   version: 3.1.1
   resolution: "@readymade/router@npm:3.1.1"
   checksum: 10c0/ad976bf240df1cb0d2ab0721d73a00bb9f954b1c260cff80e89a8cd2219712e95a74c15fad303974bf7b0ab1ed81afb139ebf368d65478b33215374be50c3089
@@ -806,6 +806,13 @@ __metadata:
   version: 3.1.1
   resolution: "@readymade/transmit@npm:3.1.1"
   checksum: 10c0/bcb9567b56858375fc49d5043b622a7ea37b6008dcdae48c58afd0f5108ac68069d8c0e5dc7f6a63ff68c33f6ca69d56b50fbd6d5c122cad433d255893e7bcb1
+  languageName: node
+  linkType: hard
+
+"@readymade/ui@npm:^3.1.1":
+  version: 3.1.1
+  resolution: "@readymade/ui@npm:3.1.1"
+  checksum: 10c0/ba0c260a8dbe49f89a0d06ae0e9cac8720b81bb5f9b78096655ad8dd8c72a156472fc574df576e0d99556c19b2e416dde2f6a2721ed22a31e52323c45f381d21
   languageName: node
   linkType: hard
 
@@ -9603,11 +9610,12 @@ __metadata:
     "@esbuild-plugins/node-modules-polyfill": "npm:^0.2.2"
     "@eslint/js": "npm:^9.12.0"
     "@lit-labs/ssr": "npm:^3.2.2"
-    "@readymade/core": "npm:^3.1.0"
-    "@readymade/dom": "npm:^3.1.0"
+    "@readymade/core": "npm:^3.1.1"
+    "@readymade/dom": "npm:^3.1.1"
     "@readymade/res": "npm:^1.0.0-beta.0"
-    "@readymade/router": "npm:^3.1.0"
+    "@readymade/router": "npm:^3.1.1"
     "@readymade/transmit": "npm:^3.1.0"
+    "@readymade/ui": "npm:^3.1.1"
     "@rollup/plugin-commonjs": "npm:^28.0.0"
     "@rollup/plugin-json": "npm:^6.1.0"
     "@rollup/plugin-node-resolve": "npm:^15.3.0"
