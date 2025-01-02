@@ -17,13 +17,13 @@ import {
   BufferGeometry,
   AdditiveBlending,
 } from 'three';
-import { EffectComposer } from 'three/addons/postprocessing/EffectComposer';
-import { RenderPass } from 'three/addons/postprocessing/RenderPass';
-import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass';
-import { HueSaturationShader } from 'three/addons/shaders/HueSaturationShader';
-import { FXAAShader } from 'three/addons/shaders/FXAAShader';
-import { ShaderPass } from 'three/addons/postprocessing/ShaderPass';
-import { OutputPass } from 'three/addons/postprocessing/OutputPass';
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer';
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass';
+import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass';
+import { HueSaturationShader } from 'three/examples/jsm/shaders/HueSaturationShader.js';
+import { FXAAShader } from 'three/examples/jsm/shaders/FXAAShader';
+import { ShaderPass } from 'three/examples/jsm/postprocessing/ShaderPass';
+import { OutputPass } from 'three/examples/jsm/postprocessing/OutputPass';
 
 import { RuttEtraShader } from './shaders/RuttEtraShader';
 import { PostProcessor, Processor, StageEquipment } from './types';
