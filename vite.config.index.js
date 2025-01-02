@@ -1,11 +1,6 @@
 import { viteStaticCopy } from 'vite-plugin-static-copy';
 
 export default {
-  resolve: {
-    alias: {
-      'three': 'node_modules/three',
-    },
-  },
   esbuild: {
     format: 'esm',
     target: 'es2022',
@@ -17,19 +12,19 @@ export default {
     },
     headers: {
       '.mp4': {
-          'Content-Type': 'video/mp4',
+        'Content-Type': 'video/mp4',
       },
       '.m4v': {
-          'Content-Type': 'video/mp4',
+        'Content-Type': 'video/mp4',
       },
       '.webm': {
-          'Content-Type': 'video/webm',
+        'Content-Type': 'video/webm',
       },
       '.ogg': {
-          'Content-Type': 'video/ogg',
+        'Content-Type': 'video/ogg',
       },
-    },   
- },
+    },
+  },
   plugins: [
     {
       name: 'remove-type-module',
