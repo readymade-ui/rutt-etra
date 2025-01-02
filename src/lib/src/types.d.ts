@@ -80,7 +80,11 @@ export interface PostProcessor {
   pass: {
     [key: string]: {
       index: number;
-      pass: RenderPass | ShaderPass | BloomPass | OutputPass;
+      pass: RenderPass | ShaderPass | UnrealBloomPass | OutputPass;
+      step?: (
+        pass: RenderPass | ShaderPass | UnrealBloomPass | OutputPass,
+        composer?: EffectComposer,
+      ) => typeof pass;
     };
   };
 }
