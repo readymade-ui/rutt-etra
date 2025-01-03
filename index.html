@@ -20669,8 +20669,30 @@ class Synth {
     }
   }
 }
-const template = '<div class="app">\n  <video\n    id="video"\n    src="video/wavves.mp4"\n    width="640"\n    height="480"\n    autoplay="true"\n    loop="loop"\n    muted\n    webkit-playsinline\n    autoload\n    crossorigin="anonymous"\n    style="display: block"\n  ></video>\n  <div class="controls">\n    <rd-surface></rd-surface>\n  </div>\n\n  <div id="play_button"></div>\n  <div id="canvas"></div>\n</div>\n';
-const style = ":host {\n  display: block;\n  background: #000000;\n  color: #cfcfcf;\n  font-family: 'Source Sans Pro', sans-serif;\n  font-weight: 400;\n  font-size: 16px;\n  padding: 0px;\n  margin: 0px;\n  width: 100%;\n  height: 100%;\n  min-height: 100vh;\n  overflow-y: auto;\n  -webkit-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n#canvas {\n  position: absolute;\n  top: 0;\n  pointer-events: none;\n}\n\n.controls {\n  position: absolute;\n  right: 0px;\n  top: 0px;\n  height: 100%;\n  z-index: 100;\n  &.hidden {\n    display: none;\n  }\n  rd-surface {\n    padding-bottom: 200px;\n  }\n}\n";
+const template = `<div class="container">
+  <video
+    id="video"
+    src="video/wavves.mp4"
+    width="640"
+    height="480"
+    autoplay="true"
+    loop="loop"
+    muted
+    webkit-playsinline
+    autoload
+    crossorigin="anonymous"
+    style="display: block"
+  ></video>
+  <div class="controls">
+    <rd-surface></rd-surface>
+    <div class="help">Press 'c' to toggle controls.</div>
+  </div>
+
+  <div id="play_button"></div>
+  <div id="canvas"></div>
+</div>
+`;
+const style = ":host {\n  display: block;\n  background: #000000;\n  color: #cfcfcf;\n  font-family: 'Source Sans Pro', sans-serif;\n  font-weight: 400;\n  font-size: 16px;\n  padding: 0px;\n  margin: 0px;\n  width: 100%;\n  height: 100%;\n  min-height: 100vh;\n  -webkit-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n.container {\n  position: absolute;\n  top: 0;\n  width: 100vw;\n  height: 100vh;\n  overflow-x: hidden;\n  overflow-y: scroll;\n}\n\n#canvas {\n  position: fixed;\n  top: 0;\n  pointer-events: none;\n}\n\n.controls {\n  position: absolute;\n  right: 0px;\n  top: 0px;\n  height: 100%;\n  z-index: 100;\n  .help {\n    text-align: center;\n    padding-bottom: 48px;\n    padding-right: 24px;\n  }\n  &.hidden {\n    display: none;\n  }\n}\n";
 function __decorate(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -24493,12 +24515,12 @@ let HomeComponent = class extends CustomElement$1 {
     )[0];
     const controlSurface = {
       style: {
-        display: "grid",
-        gridTemplateRows: "repeat(12, 12% [col-start])",
-        columnGap: "12px",
-        rowGap: "14px",
-        paddingTop: "44px",
-        paddingLeft: "20px",
+        display: "flex",
+        flexDirection: "column",
+        gap: "12px",
+        paddingTop: "24px",
+        paddingRight: "24px",
+        paddingBottom: "64px",
         width: "100%",
         overflowX: "hidden"
       },
@@ -24686,7 +24708,6 @@ let HomeComponent = class extends CustomElement$1 {
     }
   }
   onKeyDown(event) {
-    console.log(event.key);
     if (event.key === "c") {
       const controls = this.shadowRoot.querySelector(".controls");
       controls.classList.toggle("hidden");
