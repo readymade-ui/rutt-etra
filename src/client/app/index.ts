@@ -7,4 +7,4 @@ export { Router, routing } from './routing';
 // components
 
 // views
-export { HomeComponent } from './view/home';
+export { Synth, HomeComponent } from './view/home';

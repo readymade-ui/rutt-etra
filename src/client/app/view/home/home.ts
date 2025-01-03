@@ -217,7 +217,7 @@ class HomeComponent extends CustomElement {
       ) as HTMLVideoElement;
       videoElement.pause();
       this.synth.pause();
-      videoElement.src = `/video/${event.data.currentValue}`;
+      videoElement.src = `${import.meta.env.BASE_URL}video/${event.data.currentValue}`;
       videoElement.play();
       this.synth.play();
     }
@@ -249,4 +249,4 @@ export {
   RdSurface,
 } from '@readymade/ui';
 
-export { HomeComponent, render };
+export { Synth, HomeComponent, render };

@@ -1,2 +1,1 @@
-export { Synth } from '../lib/src';
-export { Router, routing, HomeComponent } from './app';
+export { Router, routing, Synth, HomeComponent } from './app';

@@ -1,1 +1,1 @@
-export { HomeComponent, render } from './home';
+export { Synth, HomeComponent, render } from './home';
