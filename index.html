@@ -24679,7 +24679,7 @@ let HomeComponent = class extends CustomElement$1 {
       );
       videoElement.pause();
       this.synth.pause();
-      videoElement.src = `${"./"}video/${event.data.currentValue}`;
+      videoElement.src = `video/${event.data.currentValue}`;
       videoElement.play();
       this.synth.play();
     }
