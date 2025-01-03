@@ -6,6 +6,10 @@
     <meta http-equiv="Permissions-Policy" content="browsing-topics=()" />
     <meta name="theme-color" content="#ff2d55" />
     <meta
+      name="Keywords"
+      content="Rutt/Etra, GLSL, Shader, Three.js, JavaScript, Web Development"
+    />
+    <meta
       name="Description"
       content="Rutt/Etra GLSL Shader example written in JavaScript with Three.js"
     />
@@ -539,6 +543,231 @@
     };
   }
 })();
+class Router {
+  constructor(root, routes, useHash) {
+    if (document.querySelector(root) === null) {
+      console.error(`[Router] Root element '${root}' does not exist.`);
+    }
+    if (!routes) {
+      console.error(`[Router] initialized without any routes.`);
+    }
+    this.rootElement = document.querySelector(root);
+    this.routes = routes;
+    if (useHash === true) {
+      this.hashMode = true;
+    } else {
+      this.hashMode = false;
+    }
+    this.listen();
+  }
+  init() {
+    this.onLocationChange();
+  }
+  listen() {
+    if (this.isPushState()) {
+      window.addEventListener("popstate", this.onLocationChange.bind(this));
+    } else if (this.isHashChange()) {
+      window.addEventListener("hashchange", this.onLocationChange.bind(this));
+    }
+    this.init();
+  }
+  onLocationChange() {
+    let path;
+    if (this.hashMode && window.location.hash.length) {
+      if (window.location.hash === "/#/") {
+        window.location.href = window.location.href + `/#`;
+      } else {
+        path = window.location.hash.replace(/^#/, "");
+      }
+    } else {
+      if (this.hashMode && !window.location.hash.length) {
+        window.location.href = window.location.origin + window.location.pathname.replace(/\/$/, "") + `/#/`;
+      } else {
+        path = window.location.pathname.replace(/\/$/, "");
+      }
+    }
+    if (path === "") {
+      path = "/";
+    }
+    if (this.matchRoute(path)) {
+      this.navigate(path);
+    }
+  }
+  decodeQuery() {
+    if (window.location.search.length === 0) {
+      return {};
+    }
+    const search = window.location.search.substring(1);
+    return JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
+  }
+  parseQuery(route) {
+    return new URLSearchParams(route.queryParams);
+  }
+  matchRoute(path) {
+    return this.routes.find((route) => route.path === path);
+  }
+  navigate(path) {
+    const route = this.matchRoute(path);
+    if (!route) {
+      console.error(`[Router] Route '${path}' does not exist.`);
+      return;
+    }
+    this.resolve(route);
+  }
+  resolve(route) {
+    const locationParams = this.decodeQuery();
+    const component = document.createElement(route.component);
+    if (Object.keys(locationParams).length) {
+      route.queryParams = locationParams;
+    } else if (route.queryParams) {
+      window.history.replaceState({}, "", `${location.pathname}?${this.parseQuery(route)}`);
+    }
+    if (route.title) {
+      document.title = route.title;
+    }
+    if (route.description) {
+      const description = document.querySelector('meta[name="description"]');
+      if (description) {
+        description.setAttribute("content", route.description);
+      }
+    }
+    if (route.schema) {
+      const script = document.querySelector('[type="application/ld+json"]');
+      if (script) {
+        script.innerHTML = route.schema;
+      }
+    }
+    this.rootElement.innerHTML = "";
+    this.rootElement.appendChild(component);
+    this.currentRoute = route;
+    if (component.onNavigate) {
+      component.onNavigate(this.currentRoute);
+    }
+  }
+  isHashChange() {
+    return typeof window !== "undefined" && "onhashchange" in window;
+  }
+  isPushState() {
+    return !!(typeof window !== "undefined" && window.history && window.history.pushState);
+  }
+}
+const routing = [{ path: "/", component: "app-home" }];
+function attachShadow$1(instance, options) {
+  if (!instance.template) {
+    return;
+  }
+  if (!instance.shadowRoot) {
+    const shadowRoot = instance.attachShadow(options);
+    const t = document.createElement("template");
+    t.innerHTML = instance.template;
+    shadowRoot.appendChild(t.content.cloneNode(true));
+  }
+  instance.bindTemplate();
+}
+typeof process === "object" && String(process) === "[object process]";
+function bindTemplate$1() {
+  if (this.bindState) {
+    this.bindState();
+  }
+}
+function compileTemplate$1(elementMeta, target) {
+  if (!elementMeta.style) {
+    elementMeta.style = [""];
+  }
+  if (!elementMeta.template) {
+    elementMeta.template = [""];
+  }
+  target.prototype.elementMeta = Object.assign(target.elementMeta ? target.elementMeta : {}, elementMeta);
+  target.prototype.elementMeta.eventMap = {};
+  target.prototype.template = `<style>${elementMeta.style}</style>${elementMeta.template}`;
+  target.prototype.bindTemplate = bindTemplate$1;
+  return target;
+}
+function Component$1(meta) {
+  if (!meta) {
+    console.error("Component must include ElementMeta to compile");
+    return;
+  }
+  return (target) => {
+    compileTemplate$1(meta, target);
+    if (meta.autoDefine === void 0) {
+      meta.autoDefine = true;
+    }
+    if (meta.autoDefine === true && customElements.get(meta.selector) === void 0) {
+      if (meta.selector && !meta.custom) {
+        customElements.define(meta.selector, target);
+      } else if (meta.selector && meta.custom) {
+        customElements.define(meta.selector, target, meta.custom);
+      } else {
+        customElements.define(meta.selector, target);
+      }
+    }
+    return target;
+  };
+}
+let CustomElement$1 = class CustomElement extends HTMLElement {
+  constructor() {
+    var _a, _b;
+    super();
+    attachShadow$1(this, {
+      mode: ((_a = this.elementMeta) == null ? void 0 : _a.mode) || "open",
+      delegatesFocus: ((_b = this.elementMeta) == null ? void 0 : _b.delegatesFocus) || false
+    });
+    if (this.bindEmitters) {
+      this.bindEmitters();
+    }
+    if (this.bindListeners) {
+      this.bindListeners();
+    }
+    if (this.onInit) {
+      this.onInit();
+    }
+  }
+  get$(selector) {
+    return this.shadowRoot ? this.shadowRoot.querySelector(selector) : this.querySelector(selector);
+  }
+  getAll$(selector) {
+    return this.shadowRoot ? this.shadowRoot.querySelectorAll(selector) : this.querySelectorAll(selector);
+  }
+  wait$(selector, timeout = 6e4) {
+    return new Promise((resolve, reject) => {
+      const startTime = Date.now();
+      const interval = 100;
+      const checkForElement = () => {
+        const elapsedTime = Date.now() - startTime;
+        const root = this.shadowRoot ? this.shadowRoot : this;
+        const element = root.querySelector(selector);
+        if (element) {
+          resolve(element);
+        } else if (elapsedTime >= timeout) {
+          reject(new Error(`Element with selector "${selector}" did not appear within ${timeout} milliseconds`));
+        } else {
+          setTimeout(checkForElement, interval);
+        }
+      };
+      checkForElement();
+    });
+  }
+  waitAll$(selector, timeout = 6e4) {
+    return new Promise((resolve, reject) => {
+      const startTime = Date.now();
+      const interval = 100;
+      const checkForElement = () => {
+        const elapsedTime = Date.now() - startTime;
+        const root = this.shadowRoot ? this.shadowRoot : this;
+        const element = root.querySelectorAll(selector);
+        if (element && element.length) {
+          resolve(element);
+        } else if (elapsedTime >= timeout) {
+          reject(new Error(`Elements with selector "${selector}" did not appear within ${timeout} milliseconds`));
+        } else {
+          setTimeout(checkForElement, interval);
+        }
+      };
+      checkForElement();
+    });
+  }
+};
 /**
  * @license
  * Copyright 2010-2024 Three.js Authors
@@ -20440,231 +20669,6 @@ class Synth {
     }
   }
 }
-class Router {
-  constructor(root, routes, useHash) {
-    if (document.querySelector(root) === null) {
-      console.error(`[Router] Root element '${root}' does not exist.`);
-    }
-    if (!routes) {
-      console.error(`[Router] initialized without any routes.`);
-    }
-    this.rootElement = document.querySelector(root);
-    this.routes = routes;
-    if (useHash === true) {
-      this.hashMode = true;
-    } else {
-      this.hashMode = false;
-    }
-    this.listen();
-  }
-  init() {
-    this.onLocationChange();
-  }
-  listen() {
-    if (this.isPushState()) {
-      window.addEventListener("popstate", this.onLocationChange.bind(this));
-    } else if (this.isHashChange()) {
-      window.addEventListener("hashchange", this.onLocationChange.bind(this));
-    }
-    this.init();
-  }
-  onLocationChange() {
-    let path;
-    if (this.hashMode && window.location.hash.length) {
-      if (window.location.hash === "/#/") {
-        window.location.href = window.location.href + `/#`;
-      } else {
-        path = window.location.hash.replace(/^#/, "");
-      }
-    } else {
-      if (this.hashMode && !window.location.hash.length) {
-        window.location.href = window.location.origin + window.location.pathname.replace(/\/$/, "") + `/#/`;
-      } else {
-        path = window.location.pathname.replace(/\/$/, "");
-      }
-    }
-    if (path === "") {
-      path = "/";
-    }
-    if (this.matchRoute(path)) {
-      this.navigate(path);
-    }
-  }
-  decodeQuery() {
-    if (window.location.search.length === 0) {
-      return {};
-    }
-    const search = window.location.search.substring(1);
-    return JSON.parse('{"' + decodeURI(search).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
-  }
-  parseQuery(route) {
-    return new URLSearchParams(route.queryParams);
-  }
-  matchRoute(path) {
-    return this.routes.find((route) => route.path === path);
-  }
-  navigate(path) {
-    const route = this.matchRoute(path);
-    if (!route) {
-      console.error(`[Router] Route '${path}' does not exist.`);
-      return;
-    }
-    this.resolve(route);
-  }
-  resolve(route) {
-    const locationParams = this.decodeQuery();
-    const component = document.createElement(route.component);
-    if (Object.keys(locationParams).length) {
-      route.queryParams = locationParams;
-    } else if (route.queryParams) {
-      window.history.replaceState({}, "", `${location.pathname}?${this.parseQuery(route)}`);
-    }
-    if (route.title) {
-      document.title = route.title;
-    }
-    if (route.description) {
-      const description = document.querySelector('meta[name="description"]');
-      if (description) {
-        description.setAttribute("content", route.description);
-      }
-    }
-    if (route.schema) {
-      const script = document.querySelector('[type="application/ld+json"]');
-      if (script) {
-        script.innerHTML = route.schema;
-      }
-    }
-    this.rootElement.innerHTML = "";
-    this.rootElement.appendChild(component);
-    this.currentRoute = route;
-    if (component.onNavigate) {
-      component.onNavigate(this.currentRoute);
-    }
-  }
-  isHashChange() {
-    return typeof window !== "undefined" && "onhashchange" in window;
-  }
-  isPushState() {
-    return !!(typeof window !== "undefined" && window.history && window.history.pushState);
-  }
-}
-const routing = [{ path: "/", component: "app-home" }];
-function attachShadow$1(instance, options) {
-  if (!instance.template) {
-    return;
-  }
-  if (!instance.shadowRoot) {
-    const shadowRoot = instance.attachShadow(options);
-    const t = document.createElement("template");
-    t.innerHTML = instance.template;
-    shadowRoot.appendChild(t.content.cloneNode(true));
-  }
-  instance.bindTemplate();
-}
-typeof process === "object" && String(process) === "[object process]";
-function bindTemplate$1() {
-  if (this.bindState) {
-    this.bindState();
-  }
-}
-function compileTemplate$1(elementMeta, target) {
-  if (!elementMeta.style) {
-    elementMeta.style = [""];
-  }
-  if (!elementMeta.template) {
-    elementMeta.template = [""];
-  }
-  target.prototype.elementMeta = Object.assign(target.elementMeta ? target.elementMeta : {}, elementMeta);
-  target.prototype.elementMeta.eventMap = {};
-  target.prototype.template = `<style>${elementMeta.style}</style>${elementMeta.template}`;
-  target.prototype.bindTemplate = bindTemplate$1;
-  return target;
-}
-function Component$1(meta) {
-  if (!meta) {
-    console.error("Component must include ElementMeta to compile");
-    return;
-  }
-  return (target) => {
-    compileTemplate$1(meta, target);
-    if (meta.autoDefine === void 0) {
-      meta.autoDefine = true;
-    }
-    if (meta.autoDefine === true && customElements.get(meta.selector) === void 0) {
-      if (meta.selector && !meta.custom) {
-        customElements.define(meta.selector, target);
-      } else if (meta.selector && meta.custom) {
-        customElements.define(meta.selector, target, meta.custom);
-      } else {
-        customElements.define(meta.selector, target);
-      }
-    }
-    return target;
-  };
-}
-let CustomElement$1 = class CustomElement extends HTMLElement {
-  constructor() {
-    var _a, _b;
-    super();
-    attachShadow$1(this, {
-      mode: ((_a = this.elementMeta) == null ? void 0 : _a.mode) || "open",
-      delegatesFocus: ((_b = this.elementMeta) == null ? void 0 : _b.delegatesFocus) || false
-    });
-    if (this.bindEmitters) {
-      this.bindEmitters();
-    }
-    if (this.bindListeners) {
-      this.bindListeners();
-    }
-    if (this.onInit) {
-      this.onInit();
-    }
-  }
-  get$(selector) {
-    return this.shadowRoot ? this.shadowRoot.querySelector(selector) : this.querySelector(selector);
-  }
-  getAll$(selector) {
-    return this.shadowRoot ? this.shadowRoot.querySelectorAll(selector) : this.querySelectorAll(selector);
-  }
-  wait$(selector, timeout = 6e4) {
-    return new Promise((resolve, reject) => {
-      const startTime = Date.now();
-      const interval = 100;
-      const checkForElement = () => {
-        const elapsedTime = Date.now() - startTime;
-        const root = this.shadowRoot ? this.shadowRoot : this;
-        const element = root.querySelector(selector);
-        if (element) {
-          resolve(element);
-        } else if (elapsedTime >= timeout) {
-          reject(new Error(`Element with selector "${selector}" did not appear within ${timeout} milliseconds`));
-        } else {
-          setTimeout(checkForElement, interval);
-        }
-      };
-      checkForElement();
-    });
-  }
-  waitAll$(selector, timeout = 6e4) {
-    return new Promise((resolve, reject) => {
-      const startTime = Date.now();
-      const interval = 100;
-      const checkForElement = () => {
-        const elapsedTime = Date.now() - startTime;
-        const root = this.shadowRoot ? this.shadowRoot : this;
-        const element = root.querySelectorAll(selector);
-        if (element && element.length) {
-          resolve(element);
-        } else if (elapsedTime >= timeout) {
-          reject(new Error(`Elements with selector "${selector}" did not appear within ${timeout} milliseconds`));
-        } else {
-          setTimeout(checkForElement, interval);
-        }
-      };
-      checkForElement();
-    });
-  }
-};
 const template = '<div class="app">\n  <video\n    id="video"\n    src="/video/wavves.mp4"\n    width="640"\n    height="480"\n    autoplay="true"\n    loop="loop"\n    muted\n    webkit-playsinline\n    autoload\n    crossorigin="anonymous"\n    style="display: block"\n  ></video>\n  <div class="controls">\n    <rd-surface></rd-surface>\n  </div>\n\n  <div id="play_button"></div>\n  <div id="canvas"></div>\n</div>\n';
 const style = ":host {\n  display: block;\n  background: #000000;\n  color: #cfcfcf;\n  font-family: 'Source Sans Pro', sans-serif;\n  font-weight: 400;\n  font-size: 16px;\n  padding: 0px;\n  margin: 0px;\n  width: 100%;\n  height: 100%;\n  min-height: 100vh;\n  overflow-y: auto;\n  -webkit-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n#canvas {\n  position: absolute;\n  top: 0;\n  pointer-events: none;\n}\n\n.controls {\n  position: absolute;\n  right: 0px;\n  top: 0px;\n  height: 100%;\n  z-index: 100;\n  rd-surface {\n    padding-bottom: 200px;\n  }\n}\n";
 function __decorate(decorators, target, key, desc) {
@@ -24675,7 +24679,7 @@ let HomeComponent = class extends CustomElement$1 {
       );
       videoElement.pause();
       this.synth.pause();
-      videoElement.src = `/video/${event.data.currentValue}`;
+      videoElement.src = `${"./"}video/${event.data.currentValue}`;
       videoElement.play();
       this.synth.play();
     }
