@@ -4,7 +4,6 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 export default {
   plugins: [
     tsconfigPaths(),
-    viteSingleFile(),
     {
       name: 'remove-type-module',
       transformIndexHtml(html) {
@@ -14,6 +13,7 @@ export default {
         );
       },
     },
+    viteSingleFile(),
     viteStaticCopy({
       targets: [
         {
