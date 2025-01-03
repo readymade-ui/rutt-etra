@@ -27,6 +27,9 @@
   top: 0px;
   height: 100%;
   z-index: 100;
+  &.hidden {
+    display: none;
+  }
   rd-surface {
     padding-bottom: 200px;
   }

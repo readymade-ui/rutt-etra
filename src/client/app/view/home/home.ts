@@ -209,6 +209,7 @@ class HomeComponent extends CustomElement {
     });
 
     this.channel.onmessage = this.onMessage.bind(this);
+    window.onkeydown = this.onKeyDown.bind(this);
   }
   onMessage(event: MessageEvent) {
     if (event.data.name === 'video') {
@@ -220,6 +221,13 @@ class HomeComponent extends CustomElement {
       videoElement.src = `video/${event.data.currentValue}`;
       videoElement.play();
       this.synth.play();
+    }
+  }
+  onKeyDown(event: KeyboardEvent) {
+    console.log(event.key);
+    if (event.key === 'c') {
+      const controls = this.shadowRoot.querySelector('.controls');
+      controls.classList.toggle('hidden');
     }
   }
 }
