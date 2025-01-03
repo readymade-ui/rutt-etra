@@ -217,7 +217,7 @@ class HomeComponent extends CustomElement {
       ) as HTMLVideoElement;
       videoElement.pause();
       this.synth.pause();
-      videoElement.src = `${import.meta.env.BASE_URL}video/${event.data.currentValue}`;
+      videoElement.src = `video/${event.data.currentValue}`;
       videoElement.play();
       this.synth.play();
     }
