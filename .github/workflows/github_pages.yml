@@ -33,7 +33,7 @@ jobs:
         run: yarn clean:dist
 
       - name: Build
-        run: yarn build:index
+        run: yarn build:client
 
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3

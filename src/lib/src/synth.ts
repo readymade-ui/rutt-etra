@@ -16,6 +16,7 @@ import {
   SRGBColorSpace,
   BufferGeometry,
   AdditiveBlending,
+  Vector2,
 } from 'three';
 import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
 import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
@@ -68,6 +69,7 @@ export class Synth {
   postProcessor: PostProcessor;
   channel: BroadcastChannel;
   controlSurface: RdControlSurface;
+  isPaused = false;
 
   constructor(
     container: Element,
@@ -177,7 +179,7 @@ export class Synth {
         },
         bloom: {
           index: 1,
-          pass: new UnrealBloomPass(0.25, 0.25, 0.25),
+          pass: new UnrealBloomPass(new Vector2(10.0, 10.0), 0.45, 0.25, 0.25),
         },
         fxxa: {
           index: 2,
@@ -249,7 +251,6 @@ export class Synth {
     this.mesh = new Mesh(this.geometry, this.material);
     if (this.controlSurface.controls.length) {
       for (const controlMeta of this.controlSurface.controls) {
-        console.log(controlMeta.control);
         this.onMessage({
           data: {
             name: controlMeta.control.name,
@@ -263,14 +264,16 @@ export class Synth {
   // animate on every requestAnimationFrame
   animate() {
     const time = performance.now();
-    if (this.texture) this.texture.needsUpdate = true;
-    if (this.material) this.material.needsUpdate = true;
-    if (this.material) this.material.wireframe = true;
-    this.mesh.scale.x = this.mesh.scale.y = 10.0;
-    this.equipment.camera.main.element.lookAt(this.mesh.position);
-    this.equipment.light.key.element.target = this.mesh;
-    this.equipment.light.back.element.target = this.mesh;
-    this.postProcessor.composer.render(time);
+    if (!this.isPaused) {
+      if (this.texture) this.texture.needsUpdate = true;
+      if (this.material) this.material.needsUpdate = true;
+      if (this.material) this.material.wireframe = true;
+      this.mesh.scale.x = this.mesh.scale.y = 10.0;
+      this.equipment.camera.main.element.lookAt(this.mesh.position);
+      this.equipment.light.key.element.target = this.mesh;
+      this.equipment.light.back.element.target = this.mesh;
+      this.postProcessor.composer.render(time);
+    }
   }
   // handle window resize
   onWindowResize() {
@@ -280,6 +283,13 @@ export class Synth {
     this.processor.renderer
       .getRenderTarget()
       .setSize(window.innerWidth, window.innerHeight);
+  }
+  pause() {
+    this.isPaused = true;
+  }
+  play() {
+    this.load();
+    this.isPaused = false;
   }
   onMessage(event) {
     switch (event.data.name) {
@@ -322,7 +332,9 @@ export class Synth {
         }
         break;
       default:
-        console.log('Unknown control:', event.data.name);
+        if (event.data.name !== 'video') {
+          console.log('Unknown control:', event.data.name);
+        }
         break;
     }
   }

@@ -39,6 +39,36 @@ class HomeComponent extends CustomElement {
       },
       controls: [
         {
+          label: 'Source',
+          selector: 'rd-dropdown',
+          channel: this.channelName,
+          style: {
+            width: '200px',
+          },
+          control: {
+            name: 'video',
+            currentValue: 'wavves.mp4',
+            attributes: {
+              options: ['wavves.mp4', 'palms.mp4', 'garage-on-fire.mp4'],
+            },
+          },
+        },
+        {
+          label: 'Mode',
+          selector: 'rd-dropdown',
+          channel: this.channelName,
+          style: {
+            width: '200px',
+          },
+          control: {
+            name: 'mode',
+            currentValue: 'Scanline',
+            attributes: {
+              options: ['Scanline', 'Vector'],
+            },
+          },
+        },
+        {
           label: 'Displacement',
           selector: 'rd-slider',
           channel: this.channelName,
@@ -48,7 +78,7 @@ class HomeComponent extends CustomElement {
             currentValue: 10.0,
             attributes: {
               orient: 'is--hor',
-              min: 0.0,
+              min: -100.0,
               max: 100.0,
             },
           },
@@ -63,7 +93,7 @@ class HomeComponent extends CustomElement {
             currentValue: 100.0,
             attributes: {
               orient: 'is--hor',
-              min: 0.0,
+              min: -200.0,
               max: 200.0,
             },
           },
@@ -97,7 +127,7 @@ class HomeComponent extends CustomElement {
             currentValue: 2000.0,
             attributes: {
               orient: 'is--hor',
-              min: 0.0,
+              min: -2000.0,
               max: 2000.0,
             },
           },
@@ -153,28 +183,13 @@ class HomeComponent extends CustomElement {
           channel: this.channelName,
           style: {
             width: '200px',
+            gridRow: 'span 2',
           },
           control: {
             name: 'orientation',
             currentValue: 'Vertical',
             attributes: {
               options: ['Horizontal', 'Vertical'],
-            },
-          },
-        },
-        {
-          label: 'Mode',
-          selector: 'rd-dropdown',
-          channel: this.channelName,
-          style: {
-            width: '200px',
-            gridRow: 'span 3',
-          },
-          control: {
-            name: 'mode',
-            currentValue: 'Scanline',
-            attributes: {
-              options: ['Scanline', 'Vector'],
             },
           },
         },
@@ -185,13 +200,27 @@ class HomeComponent extends CustomElement {
 
     setTimeout(() => {
       surface.setControlSurface(controlSurface);
-      const synth = new Synth(
+      this.synth = new Synth(
         canvasContainer,
         videoElement,
         initialControlSurface,
       );
-      console.log(synth);
+      console.log(this.synth);
     });
+
+    this.channel.onmessage = this.onMessage.bind(this);
+  }
+  onMessage(event: MessageEvent) {
+    if (event.data.name === 'video') {
+      const videoElement = this.shadowRoot.querySelector(
+        '#video',
+      ) as HTMLVideoElement;
+      videoElement.pause();
+      this.synth.pause();
+      videoElement.src = `/video/${event.data.currentValue}`;
+      videoElement.play();
+      this.synth.play();
+    }
   }
 }
 
