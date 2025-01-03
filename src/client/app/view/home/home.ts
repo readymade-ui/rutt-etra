@@ -28,12 +28,12 @@ class HomeComponent extends CustomElement {
     )[0] as RdSurface;
     const controlSurface = {
       style: {
-        display: 'grid',
-        gridTemplateRows: 'repeat(12, 12% [col-start])',
-        columnGap: '12px',
-        rowGap: '14px',
-        paddingTop: '44px',
-        paddingLeft: '20px',
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '12px',
+        paddingTop: '24px',
+        paddingRight: '24px',
+        paddingBottom: '64px',
         width: '100%',
         overflowX: 'hidden',
       },
@@ -224,7 +224,6 @@ class HomeComponent extends CustomElement {
     }
   }
   onKeyDown(event: KeyboardEvent) {
-    console.log(event.key);
     if (event.key === 'c') {
       const controls = this.shadowRoot.querySelector('.controls');
       controls.classList.toggle('hidden');
