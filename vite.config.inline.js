@@ -4,12 +4,13 @@ import { viteStaticCopy } from 'vite-plugin-static-copy';
 export default {
   plugins: [
     tsconfigPaths(),
+    viteSingleFile(),
     {
       name: 'remove-type-module',
       transformIndexHtml(html) {
         return html.replace(
           /<script type="module" crossorigin src="(\/assets\/index-[A-Za-z0-9]+\.js)"><\/script>/g,
-          '<script src="$1"></script>',
+          '<script type="module" src="$1"></script>',
         );
       },
     },
@@ -25,7 +26,6 @@ export default {
         },
       ],
     }),
-    viteSingleFile(),
   ],
   esbuild: {
     format: 'esm',
