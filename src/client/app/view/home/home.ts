@@ -99,6 +99,66 @@ class HomeComponent extends CustomElement {
           },
         },
         {
+          label: 'Opacity',
+          selector: 'rd-slider',
+          channel: this.channelName,
+          control: {
+            type: 'hor',
+            name: 'opacity',
+            currentValue: 0.25,
+            attributes: {
+              orient: 'is--hor',
+              min: 0.0,
+              max: 1.0,
+            },
+          },
+        },
+        {
+          label: 'Line Offset',
+          selector: 'rd-slider',
+          channel: this.channelName,
+          control: {
+            type: 'hor',
+            name: 'line-offset',
+            currentValue: 38.857142857142854,
+            attributes: {
+              orient: 'is--hor',
+              min: 0.0,
+              max: 128.0,
+            },
+          },
+        },
+        {
+          label: 'Line Width',
+          selector: 'rd-slider',
+          channel: this.channelName,
+          control: {
+            type: 'hor',
+            name: 'line-width',
+            currentValue: 7.619047619047619,
+            attributes: {
+              orient: 'is--hor',
+              min: 0.0,
+              max: 128.0,
+            },
+          },
+        },
+        {
+          label: 'Line Orientation',
+          selector: 'rd-dropdown',
+          channel: this.channelName,
+          style: {
+            width: '200px',
+          },
+          control: {
+            name: 'orientation',
+            currentValue: 'Vertical',
+            attributes: {
+              options: ['Horizontal', 'Vertical'],
+            },
+          },
+        },
+        {
           label: 'Origin (XY)',
           selector: 'rd-slider',
           channel: this.channelName,
@@ -133,63 +193,36 @@ class HomeComponent extends CustomElement {
           },
         },
         {
-          label: 'Opacity',
+          label: 'Camera (XY)',
           selector: 'rd-slider',
-          channel: this.channelName,
-          control: {
-            type: 'hor',
-            name: 'opacity',
-            currentValue: 0.25,
-            attributes: {
-              orient: 'is--hor',
-              min: 0.0,
-              max: 1.0,
-            },
-          },
-        },
-        {
-          label: 'Line Offset',
-          selector: 'rd-slider',
-          channel: this.channelName,
-          control: {
-            type: 'hor',
-            name: 'line-offset',
-            currentValue: 48.0,
-            attributes: {
-              orient: 'is--hor',
-              min: 0.0,
-              max: 128.0,
-            },
-          },
-        },
-        {
-          label: 'Line Width',
-          selector: 'rd-slider',
-          channel: this.channelName,
-          control: {
-            type: 'hor',
-            name: 'line-width',
-            currentValue: 12.0,
-            attributes: {
-              orient: 'is--hor',
-              min: 0.0,
-              max: 128.0,
-            },
-          },
-        },
-        {
-          label: 'Line Orientation',
-          selector: 'rd-dropdown',
           channel: this.channelName,
           style: {
-            width: '200px',
             gridRow: 'span 2',
+            alignSelf: 'start',
           },
           control: {
-            name: 'orientation',
-            currentValue: 'Vertical',
+            type: 'joystick',
+            name: 'camera-xy',
+            currentValue: [0.0, -1130.0],
             attributes: {
-              options: ['Horizontal', 'Vertical'],
+              orient: 'is--joystick',
+              min: [-5000.0, -5000.0],
+              max: [5000.0, 5000.0],
+            },
+          },
+        },
+        {
+          label: 'Camera (Z)',
+          selector: 'rd-slider',
+          channel: this.channelName,
+          control: {
+            type: 'hor',
+            name: 'camera-z',
+            currentValue: 4680.0,
+            attributes: {
+              orient: 'is--hor',
+              min: -5000.0,
+              max: 5000.0,
             },
           },
         },

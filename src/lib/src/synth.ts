@@ -293,6 +293,15 @@ export class Synth {
   }
   onMessage(event) {
     switch (event.data.name) {
+      case 'camera-xy':
+        this.equipment.camera.main.element.position.x =
+          event.data.currentValue[0];
+        this.equipment.camera.main.element.position.y =
+          event.data.currentValue[1];
+        break;
+      case 'camera-z':
+        this.equipment.camera.main.element.position.z = event.data.currentValue;
+        break;
       case 'displacement':
         this.material.uniforms['displace'].value = event.data.currentValue;
         break;
