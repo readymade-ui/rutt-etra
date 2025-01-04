@@ -20623,6 +20623,13 @@ class Synth {
   }
   onMessage(event) {
     switch (event.data.name) {
+      case "camera-xy":
+        this.equipment.camera.main.element.position.x = event.data.currentValue[0];
+        this.equipment.camera.main.element.position.y = event.data.currentValue[1];
+        break;
+      case "camera-z":
+        this.equipment.camera.main.element.position.z = event.data.currentValue;
+        break;
       case "displacement":
         this.material.uniforms["displace"].value = event.data.currentValue;
         break;
@@ -24615,6 +24622,66 @@ let HomeComponent = class extends CustomElement$1 {
           }
         },
         {
+          label: "Opacity",
+          selector: "rd-slider",
+          channel: this.channelName,
+          control: {
+            type: "hor",
+            name: "opacity",
+            currentValue: 0.25,
+            attributes: {
+              orient: "is--hor",
+              min: 0,
+              max: 1
+            }
+          }
+        },
+        {
+          label: "Line Offset",
+          selector: "rd-slider",
+          channel: this.channelName,
+          control: {
+            type: "hor",
+            name: "line-offset",
+            currentValue: 38.857142857142854,
+            attributes: {
+              orient: "is--hor",
+              min: 0,
+              max: 128
+            }
+          }
+        },
+        {
+          label: "Line Width",
+          selector: "rd-slider",
+          channel: this.channelName,
+          control: {
+            type: "hor",
+            name: "line-width",
+            currentValue: 7.619047619047619,
+            attributes: {
+              orient: "is--hor",
+              min: 0,
+              max: 128
+            }
+          }
+        },
+        {
+          label: "Line Orientation",
+          selector: "rd-dropdown",
+          channel: this.channelName,
+          style: {
+            width: "200px"
+          },
+          control: {
+            name: "orientation",
+            currentValue: "Vertical",
+            attributes: {
+              options: ["Horizontal", "Vertical"]
+            }
+          }
+        },
+        {
           label: "Origin (XY)",
           selector: "rd-slider",
           channel: this.channelName,
@@ -24649,63 +24716,36 @@ let HomeComponent = class extends CustomElement$1 {
           }
         },
         {
-          label: "Opacity",
+          label: "Camera (XY)",
           selector: "rd-slider",
-          channel: this.channelName,
-          control: {
-            type: "hor",
-            name: "opacity",
-            currentValue: 0.25,
-            attributes: {
-              orient: "is--hor",
-              min: 0,
-              max: 1
-            }
-          }
-        },
-        {
-          label: "Line Offset",
-          selector: "rd-slider",
-          channel: this.channelName,
-          control: {
-            type: "hor",
-            name: "line-offset",
-            currentValue: 48,
-            attributes: {
-              orient: "is--hor",
-              min: 0,
-              max: 128
-            }
-          }
-        },
-        {
-          label: "Line Width",
-          selector: "rd-slider",
-          channel: this.channelName,
-          control: {
-            type: "hor",
-            name: "line-width",
-            currentValue: 12,
-            attributes: {
-              orient: "is--hor",
-              min: 0,
-              max: 128
-            }
-          }
-        },
-        {
-          label: "Line Orientation",
-          selector: "rd-dropdown",
           channel: this.channelName,
           style: {
-            width: "200px",
-            gridRow: "span 2"
+            gridRow: "span 2",
+            alignSelf: "start"
           },
           control: {
-            name: "orientation",
-            currentValue: "Vertical",
+            type: "joystick",
+            name: "camera-xy",
+            currentValue: [0, -1130],
             attributes: {
-              options: ["Horizontal", "Vertical"]
+              orient: "is--joystick",
+              min: [-5e3, -5e3],
+              max: [5e3, 5e3]
+            }
+          }
+        },
+        {
+          label: "Camera (Z)",
+          selector: "rd-slider",
+          channel: this.channelName,
+          control: {
+            type: "hor",
+            name: "camera-z",
+            currentValue: 4680,
+            attributes: {
+              orient: "is--hor",
+              min: -5e3,
+              max: 5e3
             }
           }
         }
