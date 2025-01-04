@@ -21165,13 +21165,12 @@ function State() {
   };
 }
 function Emitter(eventName, options, channelName) {
-  return function decorator(target) {
+  return function decorator(target, propertyKey, descriptor) {
     const channel = "default";
-    let prop = "";
     if (eventName) {
-      prop = EMIT_KEY + channel + eventName;
+      propertyKey = EMIT_KEY + channel + eventName;
     } else {
-      prop = EMIT_KEY + channel;
+      propertyKey = EMIT_KEY + channel;
     }
     function addEvent(name, chan) {
       if (!this.emitter) {
@@ -21191,9 +21190,9 @@ function Emitter(eventName, options, channelName) {
         }
       }
     }
-    if (!target[prop]) {
-      target[prop] = function() {
-        addEvent.call(this, eventName, channelName);
+    if (!target[propertyKey]) {
+      target[propertyKey] = function() {
+        addEvent.call(this, eventName, channelName, descriptor);
       };
     }
     target.bindEmitters = function onEmitterInit() {
@@ -22628,7 +22627,7 @@ let RdRadioGroup = class RdRadioGroup2 extends FormElement {
         const input = document.createElement("input");
         const label = document.createElement("label");
         input.setAttribute("type", "radio");
-        input.setAttribute("name", control.attributes.inputs[i].name);
+        input.setAttribute("name", control.attributes.inputs[i].label);
         input.setAttribute("value", control.attributes.inputs[i].value);
         label.setAttribute("for", control.attributes.inputs[i].value);
         label.textContent = control.attributes.inputs[i].label;
@@ -23021,6 +23020,12 @@ let RdSlider = class RdSlider2 extends FormElement {
   constructor() {
     super();
   }
+  connectedCallback() {
+    this._hasConnected = true;
+    if (this._hasPendingControl) {
+      this.onSliderInit();
+    }
+  }
   static get observedAttributes() {
     return ["type", "size", "control", "channel"];
   }
@@ -23107,18 +23112,40 @@ let RdSlider = class RdSlider2 extends FormElement {
     }
     if (this.control.attributes.orient === "is--hor") {
       this.style.maxWidth = "200px";
-      this.control.currentValue = 0;
-      this.control.attributes.position = "translate(0px,0px)";
+      this.style.maxHeight = "32px";
+      if (this.control.currentValue === void 0 || this.control.currentValue === null || isNaN(this.control.currentValue)) {
+        this.control.currentValue = 0;
+        this.control.attributes.position = "translate(0px,0px)";
+      } else {
+        this.control.attributes.x = this.scale(this.control.currentValue, this.control.attributes.min, this.control.attributes.max, 0, 168);
+        this.control.attributes.y = this.clientHeight / 2;
+        this.control.attributes.position = "translate(" + this.control.attributes.x + "px," + this.control.attributes.y + "px)";
+      }
     } else if (this.control.attributes.orient === "is--vert") {
-      this.style.height = "200px";
-      this.control.currentValue = 0;
-      this.control.attributes.position = "translate(0px,0px)";
+      this.style.maxWidth = "32px";
+      this.style.maxHeight = "200px";
+      if (this.control.currentValue === void 0 || this.control.currentValue === null || isNaN(this.control.currentValue)) {
+        this.control.currentValue = 0;
+        this.control.attributes.position = "translate(0px,0px)";
+      } else {
+        this.control.attributes.x = this.clientWidth / 2;
+        this.control.attributes.y = this.scale(this.control.currentValue, this.control.attributes.min, this.control.attributes.max, 0, 168);
+      }
     } else if (this.control.attributes.orient.includes("is--joystick")) {
       this.style.maxWidth = "200px";
       this.style.maxHeight = "200px";
-      this.control.currentValue = [0, 0];
-      this.control.attributes.x = this.control.attributes.y = 76;
-      this.control.attributes.position = "translate(76px,76px)";
+      if (this.control.currentValue === void 0 || this.control.currentValue === null) {
+        this.control.currentValue = [0, 0];
+        this.control.attributes.x = this.control.attributes.y = 76;
+      } else {
+        if (this.control.attributes.snapToCenter === true) {
+          this.control.attributes.x = this.clientWidth / 2 + this.$handle.offsetWidth / 2;
+          this.control.attributes.y = this.clientHeight / 2 + this.$handle.offsetHeight / 2;
+        } else {
+          this.control.attributes.x = this.scale(this.control.currentValue[0], this.control.attributes.min[0], this.control.attributes.max[0], 0, this.clientWidth) + this.$handle.offsetWidth / 2;
+          this.control.attributes.y = this.scale(this.control.currentValue[1], this.control.attributes.min[1], this.control.attributes.max[1], 0, this.clientHeight) + this.$handle.offsetWidth / 2;
+        }
+      }
       const joyStickType = this.control.attributes.orient.replace("is--joystick--", "");
       if (joyStickType === "is--joystick") {
         this._joystickType = "circle";
@@ -23127,7 +23154,8 @@ let RdSlider = class RdSlider2 extends FormElement {
       }
       this.shadowRoot.querySelector(".slider").classList.add(this._joystickType);
     }
-    this.setActualPosition(this.control.attributes.position);
+    this.setPosition(this.control.attributes.x, this.control.attributes.y);
+    this.mapValue();
   }
   onMouseLeave() {
   }
@@ -23438,10 +23466,11 @@ let RdSlider = class RdSlider2 extends FormElement {
     if (this.control.attributes.size) {
       this.shadowRoot.querySelector(".slider").classList.add(this.control.attributes.size);
     }
-    if (control.currentValue !== void 0) {
-      this.value = control.currentValue;
+    if (this._hasConnected === true) {
+      this.onSliderInit();
+    } else {
+      this._hasPendingControl = true;
     }
-    this.onSliderInit();
   }
 };
 __decorate([
