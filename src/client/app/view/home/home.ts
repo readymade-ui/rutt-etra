@@ -1,5 +1,5 @@
 import { Component, CustomElement } from '@readymade/core';
-import { RdSurface } from '@readymade/ui';
+import { RdControlSurface, RdSurface } from '@readymade/ui';
 import { Synth } from '../../../../lib/src';
 import template from './home.html?raw';
 import style from './home.css?raw';
@@ -26,7 +26,7 @@ class HomeComponent extends CustomElement {
     const surface = this.shadowRoot?.querySelectorAll(
       'rd-surface',
     )[0] as RdSurface;
-    const controlSurface = {
+    const controlSurface: RdControlSurface = {
       style: {
         display: 'flex',
         flexDirection: 'column',
