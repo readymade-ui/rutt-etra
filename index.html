@@ -20362,7 +20362,9 @@ const RuttEtraShader = {
     lineOrientation: { value: 1 },
     mode: { value: 0 }
   },
-  vertexShader: `
+  vertexShader: (
+    /* glsl */
+    `
 		precision highp float;
 		uniform sampler2D map;
 		varying vec2 vUv;
@@ -20380,8 +20382,11 @@ const RuttEtraShader = {
 			vec4 pos = vec4(normalize(position - origin) * depth * vec3(1.0, 1.0, displace), 0.0) + vec4(position, 1.0);
 			gl_Position = projectionMatrix * modelViewMatrix * pos;
 		}
-	`,
-  fragmentShader: `
+	`
+  ),
+  fragmentShader: (
+    /* glsl */
+    `
   		precision highp int;
 		precision highp float;
 		uniform sampler2D map;
@@ -20408,6 +20413,7 @@ const RuttEtraShader = {
 			}
 		}
 	`
+  )
 };
 function postProcess(processor) {
   const sorted = Object.values(processor.pass).sort(
