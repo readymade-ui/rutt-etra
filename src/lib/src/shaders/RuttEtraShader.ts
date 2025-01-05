@@ -36,7 +36,7 @@ const RuttEtraShader = {
     lineOrientation: { value: 1 },
     mode: { value: 0 },
   },
-  vertexShader: `
+  vertexShader: /* glsl */ `
 		precision highp float;
 		uniform sampler2D map;
 		varying vec2 vUv;
@@ -55,7 +55,7 @@ const RuttEtraShader = {
 			gl_Position = projectionMatrix * modelViewMatrix * pos;
 		}
 	`,
-  fragmentShader: `
+  fragmentShader: /* glsl */ `
   		precision highp int;
 		precision highp float;
 		uniform sampler2D map;
