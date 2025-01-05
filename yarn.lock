@@ -770,17 +770,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@readymade/core@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "@readymade/core@npm:3.1.2"
-  checksum: 10c0/fb5ba92dd270cca1f062291b2039bbfc16dc9f36a2cd9cdb289863265f7445a0556138f2f01d3c34f7a752bf89d18ac4b9daa08a16d3af737dc51ad72eff911c
+"@readymade/core@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "@readymade/core@npm:3.1.3"
+  checksum: 10c0/f1893c56ff2e91a94ea10bafb16d05819785acbfe4c0171296ee3eabfc9bfffbd580e7b7b16ad62ae9d55300c74a17120804bb3b625e1e8d8eefe79f4c7e5a8e
   languageName: node
   linkType: hard
 
-"@readymade/dom@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "@readymade/dom@npm:3.1.2"
-  checksum: 10c0/1f4a842d9acb8ac257425abec01b7b368fcc5256ab12361446845328e7aa7505f2e6dae00f0aa50d1cbe887eb35047f16197bc1b9abbb1e74f826d27506cea71
+"@readymade/dom@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "@readymade/dom@npm:3.1.3"
+  checksum: 10c0/edf6dc980ce761bf588e467d91f8a32d5c627e3e55e00530f25b02d2b39621ea8bd115409142e5e205251a7bef1f99a3ea3163aae34ffb9a17cd3891bdb672a0
   languageName: node
   linkType: hard
 
@@ -795,24 +795,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@readymade/router@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "@readymade/router@npm:3.1.2"
-  checksum: 10c0/8bd043f10e8ee6d8fbce2b166e611da0f4f755a27d0bb6b7ba52c347d50c5940250852fe2c5b5a00ee612ead37aca59d1ec8cd61c835e5d3672d9a5d7a1d09ac
+"@readymade/router@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "@readymade/router@npm:3.1.3"
+  checksum: 10c0/0c5f47d0403852d56dd5b419ea067f73700aefa43d189fdef46234d4f3a8f3bd804c42d12672fa330f4a1cd4867fc1a881df16b064c5ebbbca49f4598d64c597
   languageName: node
   linkType: hard
 
-"@readymade/transmit@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "@readymade/transmit@npm:3.1.2"
-  checksum: 10c0/7402573d5bebe314d8d5361dc05f53350cd062ccfc05d7f14c3dbec3e185b06f0ac8a6034a472e6bfdd6ee28c21cddb17889505fc1099ae7d6cf6a14ade6b8ce
+"@readymade/transmit@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "@readymade/transmit@npm:3.1.3"
+  checksum: 10c0/705c690203c4a21446826f8002924c85f4b09bf175ebefb28033a14bb55ead99422db4278aee33d7ff62ee9f15c724c1678538bc6938614e61b359a2dc9976fb
   languageName: node
   linkType: hard
 
-"@readymade/ui@npm:^3.1.2":
-  version: 3.1.2
-  resolution: "@readymade/ui@npm:3.1.2"
-  checksum: 10c0/012a73a2e9a985aad1c830a8950435676ed5f0393e11c4d80a4eb4672f766a6ec8953a931b156609f8cecbb21dea0d6fa58aa1414c775bb7e933c3e8eb236738
+"@readymade/ui@npm:^3.1.3":
+  version: 3.1.3
+  resolution: "@readymade/ui@npm:3.1.3"
+  checksum: 10c0/3a17bd9c3c8b3cd631f6be357e3bde09f6f23c4b28d37ecad216cc5638b0a309840642da6335b38e14e6ecbb19b35fb933f907fde5b26cce474c0ba91aa0760d
   languageName: node
   linkType: hard
 
@@ -9626,12 +9626,12 @@ __metadata:
     "@esbuild-plugins/node-modules-polyfill": "npm:^0.2.2"
     "@eslint/js": "npm:^9.12.0"
     "@lit-labs/ssr": "npm:^3.2.2"
-    "@readymade/core": "npm:^3.1.2"
-    "@readymade/dom": "npm:^3.1.2"
+    "@readymade/core": "npm:^3.1.3"
+    "@readymade/dom": "npm:^3.1.3"
     "@readymade/res": "npm:^1.0.0-beta.0"
-    "@readymade/router": "npm:^3.1.2"
-    "@readymade/transmit": "npm:^3.1.2"
-    "@readymade/ui": "npm:^3.1.2"
+    "@readymade/router": "npm:^3.1.3"
+    "@readymade/transmit": "npm:^3.1.3"
+    "@readymade/ui": "npm:^3.1.3"
     "@rollup/plugin-commonjs": "npm:^28.0.0"
     "@rollup/plugin-json": "npm:^6.1.0"
     "@rollup/plugin-node-resolve": "npm:^15.3.0"

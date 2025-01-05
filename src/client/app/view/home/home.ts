@@ -82,6 +82,7 @@ class HomeComponent extends CustomElement {
               max: 100.0,
             },
           },
+          displayValue: true,
         },
         {
           label: 'Multiplier',
@@ -97,6 +98,7 @@ class HomeComponent extends CustomElement {
               max: 200.0,
             },
           },
+          displayValue: true,
         },
         {
           label: 'Opacity',
@@ -112,6 +114,7 @@ class HomeComponent extends CustomElement {
               max: 1.0,
             },
           },
+          displayValue: true,
         },
         {
           label: 'Line Offset',
@@ -127,6 +130,7 @@ class HomeComponent extends CustomElement {
               max: 128.0,
             },
           },
+          displayValue: true,
         },
         {
           label: 'Line Width',
@@ -142,6 +146,7 @@ class HomeComponent extends CustomElement {
               max: 128.0,
             },
           },
+          displayValue: true,
         },
         {
           label: 'Line Orientation',
@@ -176,6 +181,7 @@ class HomeComponent extends CustomElement {
               max: [2000.0, 2000.0],
             },
           },
+          displayValue: true,
         },
         {
           label: 'Origin (Z)',
@@ -191,6 +197,7 @@ class HomeComponent extends CustomElement {
               max: 2000.0,
             },
           },
+          displayValue: true,
         },
         {
           label: 'Camera (XY)',
@@ -210,6 +217,7 @@ class HomeComponent extends CustomElement {
               max: [5000.0, 5000.0],
             },
           },
+          displayValue: true,
         },
         {
           label: 'Camera (Z)',
@@ -225,6 +233,7 @@ class HomeComponent extends CustomElement {
               max: 5000.0,
             },
           },
+          displayValue: true,
         },
       ],
     };
