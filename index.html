@@ -20699,7 +20699,7 @@ const template = `<div class="container">
   <div id="canvas"></div>
 </div>
 `;
-const style = ":host {\n  display: block;\n  background: #000000;\n  color: #cfcfcf;\n  font-family: 'Source Sans Pro', sans-serif;\n  font-weight: 400;\n  font-size: 16px;\n  padding: 0px;\n  margin: 0px;\n  width: 100%;\n  height: 100%;\n  min-height: 100vh;\n  -webkit-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n.container {\n  position: absolute;\n  top: 0;\n  width: 100vw;\n  height: 100vh;\n  overflow-x: hidden;\n  overflow-y: scroll;\n}\n\n#canvas {\n  position: fixed;\n  top: 0;\n  pointer-events: none;\n}\n\n.controls {\n  position: absolute;\n  right: 0px;\n  top: 0px;\n  height: 100%;\n  z-index: 100;\n  .help {\n    text-align: center;\n    padding-bottom: 48px;\n    padding-right: 24px;\n  }\n  &.hidden {\n    display: none;\n  }\n}\n";
+const style = ":host {\n  display: block;\n  background: #000000;\n  color: #cfcfcf;\n  font-family: 'Source Sans Pro', sans-serif;\n  font-weight: 400;\n  font-size: 16px;\n  padding: 0px;\n  margin: 0px;\n  width: 100%;\n  height: 100%;\n  min-height: 100vh;\n  -webkit-font-smoothing: auto;\n  -moz-osx-font-smoothing: grayscale;\n}\n\n.container {\n  position: absolute;\n  top: 0;\n  width: 100vw;\n  height: 100vh;\n  overflow-x: hidden;\n  overflow-y: scroll;\n}\n\n#canvas {\n  position: fixed;\n  top: 0;\n  pointer-events: none;\n}\n\n.controls {\n  position: absolute;\n  right: 0px;\n  top: 0px;\n  height: 100%;\n  width: 250px;\n  z-index: 100;\n  .help {\n    text-align: center;\n    padding-bottom: 48px;\n    padding-right: 24px;\n  }\n  &.hidden {\n    display: none;\n  }\n}\n";
 function __decorate(decorators, target, key, desc) {
   var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
   if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -22645,7 +22645,8 @@ let RdRadioGroup = class RdRadioGroup2 extends FormElement {
         elem.onblur = () => {
           this.onValidate();
         };
-        elem.onclick = (ev) => {
+        elem.onchange = (ev) => {
+          this.value = ev.target.value;
           if (this.channel) {
             this.control.currentValue = ev.target.value;
             this.channel.postMessage(this.control);
@@ -22924,7 +22925,11 @@ let RdDropdown = class RdDropdown2 extends FormElement {
     if (control.attributes.options) {
       this.innerHTML = "";
       const select = document.createElement("select");
-      for (let i = 0; i <= control.attributes.options.length; i++) {
+      const defaultOption = document.createElement("option");
+      defaultOption.value = "";
+      defaultOption.text = "Select an option";
+      select.appendChild(defaultOption);
+      for (let i = 0; i < control.attributes.options.length; i++) {
         const option = document.createElement("option");
         option.textContent = control.attributes.options[i];
         select.appendChild(option);
@@ -23397,10 +23402,10 @@ let RdSlider = class RdSlider2 extends FormElement {
   }
   mapValue() {
     if (this.control.attributes.orient === "is--hor") {
-      this.control.currentValue = this.clampSlider(this.scale(this.control.attributes.x, 0, this.control.attributes.width - this.$handle.offsetWidth, this.control.attributes.min, this.control.attributes.max));
+      this.control.currentValue = this.clampSlider(this.scale(this.control.attributes.x, 0, 168, this.control.attributes.min, this.control.attributes.max));
     }
     if (this.control.attributes.orient === "is--vert") {
-      this.control.currentValue = this.clampSlider(this.scale(this.control.attributes.y, 0, this.control.attributes.height - this.$handle.offsetHeight, this.control.attributes.min, this.control.attributes.max));
+      this.control.currentValue = this.clampSlider(this.scale(this.control.attributes.y, 0, 168, this.control.attributes.min, this.control.attributes.max));
     }
     if (this._joystickType) {
       this.control.currentValue = [
@@ -24469,11 +24474,65 @@ let RdSurfaceElement = class RdSurfaceElement2 extends BlockComponent {
       });
       this.appendChild(dialog);
     }
+    if (surface.displayValue === true) {
+      const displayValue = document.createElement("span");
+      displayValue.classList.add("rd-display-value");
+      label.appendChild(displayValue);
+    }
     this.appendChild(label);
     this.appendChild(element);
     element.setControl(surface.control);
     if (surface.channel) {
       element.setChannel(surface.channel);
+    }
+    if (surface.displayValue === true) {
+      element.onchange = () => {
+        const displayValue = this.querySelector(".rd-display-value");
+        displayValue.classList.remove("hidden");
+        window.clearTimeout(this.timeout$);
+        if (displayValue) {
+          let inputDebounce;
+          displayValue.innerHTML = "";
+          if (Array.isArray(element.value)) {
+            element.value.forEach((value, index) => {
+              const input = document.createElement("rd-displayinput");
+              input.classList.add("rd-display-input");
+              input.value = value;
+              displayValue.appendChild(input);
+              input.oninput = () => {
+                window.clearTimeout(this.timeout$);
+                inputDebounce = setTimeout(() => {
+                  const inputValues = element.value;
+                  if (surface.control.currentValue.some((val) => typeof val === "number")) {
+                    inputValues[index] = parseFloat(input.value);
+                  } else {
+                    inputValues[index] = input.value;
+                  }
+                  element.value = inputValues;
+                }, 400);
+              };
+            });
+          } else {
+            const input = document.createElement("rd-displayinput");
+            input.classList.add("rd-display-input");
+            input.value = element.value;
+            displayValue.appendChild(input);
+            input.oninput = () => {
+              window.clearTimeout(inputDebounce);
+              inputDebounce = setTimeout(() => {
+                if (typeof surface.control.currentValue === "number") {
+                  element.value = parseFloat(input.value);
+                } else {
+                  element.value = input.value;
+                }
+              }, 400);
+            };
+          }
+        }
+        this.timeout$ = setTimeout(() => {
+          displayValue.classList.add("hidden");
+        }, 4e3);
+      };
     }
   }
 };
@@ -24486,7 +24545,10 @@ RdSurfaceElement = __decorate([
       flex-direction: column;
     }
     .surface-label {
-      margin-bottom: 1em;
+      display: flex;
+      align-items: center;
+      margin-bottom: 0.75em;
+      height: 36px;
     }
     .surface-label .hint {
       display: inline-block;
@@ -24516,6 +24578,16 @@ RdSurfaceElement = __decorate([
       inset: auto;
       overflow: scroll;
     }
+    .rd-display-value {
+      height: 36px;
+      &.hidden {
+        display: none;
+      }
+    }
+    rd-displayinput {
+      display: inline-block;
+      margin-left: 10px;
+    }
     ::backdrop {
       background: var(--ready-popover-bg);
     }
@@ -24524,6 +24596,64 @@ RdSurfaceElement = __decorate([
   }),
   __metadata("design:paramtypes", [])
 ], RdSurfaceElement);
+let RdDisplayInput = class RdDisplayInput2 extends RdInput {
+  constructor() {
+    super();
+  }
+};
+RdDisplayInput = __decorate([
+  Component({
+    selector: "rd-displayinput",
+    delegatesFocus: true,
+    style: css`
+    :host {
+      display: inline-block;
+      outline: none;
+      padding: 0;
+    }
+    :host input {
+      height: 16px;
+      width: 36px;
+      background-color: var(--ready-color-bg);
+      border: var(--ready-border-width) solid var(--ready-color-border);
+      border-radius: var(--ready-border-radius);
+      color: var(--ready-color-default);
+      font: var(--font-family);
+      min-height: 2em;
+      padding: 0em 1em;
+    }
+    :host input:hover,
+    :host input:focus,
+    :host input:active {
+      border: var(--ready-border-width) solid var(--ready-color-highlight);
+      outline: none;
+      box-shadow: none;
+    }
+    :host input[disabled] {
+      opacity: var(--ready-opacity-disabled);
+      background: var(--ready-color-disabled);
+      cursor: not-allowed;
+    }
+    :host input[disabled]:hover,
+    :host input[disabled]:focus,
+    :host input[disabled]:active {
+      border: var(--ready-border-width) solid var(--ready-color-border);
+      outline: none;
+      box-shadow: none;
+    }
+    :host input.required,
+    :host input.required:hover,
+    :host input.required:focus,
+    :host input.required:active {
+      border: var(--ready-border-width) solid var(--ready-color-error);
+      outline: none;
+      box-shadow: none;
+    }
+  `,
+    template: html` <input type="text" /> `
+  }),
+  __metadata("design:paramtypes", [])
+], RdDisplayInput);
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __decorateClass = (decorators, target, key, kind) => {
@@ -24604,7 +24734,8 @@ let HomeComponent = class extends CustomElement$1 {
               min: -100,
               max: 100
             }
-          }
+          },
+          displayValue: true
         },
         {
           label: "Multiplier",
@@ -24619,7 +24750,8 @@ let HomeComponent = class extends CustomElement$1 {
               min: -200,
               max: 200
             }
-          }
+          },
+          displayValue: true
         },
         {
           label: "Opacity",
@@ -24634,7 +24766,8 @@ let HomeComponent = class extends CustomElement$1 {
               min: 0,
               max: 1
             }
-          }
+          },
+          displayValue: true
         },
         {
           label: "Line Offset",
@@ -24649,7 +24782,8 @@ let HomeComponent = class extends CustomElement$1 {
               min: 0,
               max: 128
             }
-          }
+          },
+          displayValue: true
         },
         {
           label: "Line Width",
@@ -24664,7 +24798,8 @@ let HomeComponent = class extends CustomElement$1 {
               min: 0,
               max: 128
             }
-          }
+          },
+          displayValue: true
         },
         {
           label: "Line Orientation",
@@ -24698,7 +24833,8 @@ let HomeComponent = class extends CustomElement$1 {
               min: [-2e3, -2e3],
               max: [2e3, 2e3]
             }
-          }
+          },
+          displayValue: true
         },
         {
           label: "Origin (Z)",
@@ -24713,7 +24849,8 @@ let HomeComponent = class extends CustomElement$1 {
               min: -2e3,
               max: 2e3
             }
-          }
+          },
+          displayValue: true
         },
         {
           label: "Camera (XY)",
@@ -24732,7 +24869,8 @@ let HomeComponent = class extends CustomElement$1 {
               min: [-5e3, -5e3],
               max: [5e3, 5e3]
             }
-          }
+          },
+          displayValue: true
         },
         {
           label: "Camera (Z)",
@@ -24747,7 +24885,8 @@ let HomeComponent = class extends CustomElement$1 {
               min: -5e3,
               max: 5e3
             }
-          }
+          },
+          displayValue: true
         }
       ]
     };
