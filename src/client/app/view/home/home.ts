@@ -1,6 +1,6 @@
 import { Component, CustomElement } from '@readymade/core';
 import { RdControlSurface, RdSurface } from '@readymade/ui';
-import { Synth } from '../../../../lib/src';
+import { Synth } from './../../../../modules/rutt-etra/src';
 import template from './home.html?raw';
 import style from './home.css?raw';
 

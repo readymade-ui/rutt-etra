@@ -74,7 +74,7 @@ export class Synth {
   constructor(
     container: Element,
     videoInput: HTMLVideoElement,
-    controlSurface: RdControlSurface,
+    controlSurface?: RdControlSurface,
   ) {
     // set dom elements for canvas and video
     this.container = container;
@@ -249,14 +249,16 @@ export class Synth {
       blending: AdditiveBlending,
     });
     this.mesh = new Mesh(this.geometry, this.material);
-    if (this.controlSurface.controls.length) {
-      for (const controlMeta of this.controlSurface.controls) {
-        this.onMessage({
-          data: {
-            name: controlMeta.control.name,
-            currentValue: controlMeta.control.currentValue,
-          },
-        });
+    if (this.controlSurface) {
+      if (this.controlSurface.controls.length) {
+        for (const controlMeta of this.controlSurface.controls) {
+          this.onMessage({
+            data: {
+              name: controlMeta.control.name,
+              currentValue: controlMeta.control.currentValue,
+            },
+          });
+        }
       }
     }
     this.scene.add(this.mesh);

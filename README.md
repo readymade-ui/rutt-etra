@@ -1,8 +1,77 @@
-# Rutt-Etra GLSL Shader
+# Rutt/Etra GLSL Shader
 
 This project includes a GLSL shader that emulates the behavior of the analog Rutt/Etra video synthesizer. The original Rutt/Etra video synthesizer was developed by Steve Rutt and Bill Etra in the 1970s. Several video artists have used the Rutt/Etra video synthesizer to create video art, including Nam June Paik, Gary Hill, Woody Vasulka, and Steina Vasulka.
 
 This shader is designed to be used with Three.js and is based on the legacy of the Rutt/Etra video synthesizer. For the full effect, combine this shader with a video texture and effects composer using BloomPass and FXAA. An example is provided in the source code.
+
+## Install
+
+```
+npm install @readymade/rutt-etra
+```
+
+## Getting Started
+
+The shader works with JavaScript that accepts GLSL. three.js allows you to apply third party shaders with a `ShaderMaterial`. In the example below, we import all the necessary parts from three, along with `RuttEtraShader`.
+
+```
+import { VideoTexture, ShaderMaterial, DoubleSide, AdditiveBlending } from 'three';
+import { RuttEtraShader } from '@readymade/rutt-etra';
+```
+
+The Rutt/Etra GLSL Shader can be applied with custom uniforms like in the below example that also accepts a video as a texture.
+
+```
+const videoElement = this.querySelector('#video');
+const texture = new VideoTexture(videoElement);
+const material = new ShaderMaterial({
+      uniforms: {
+        map: { value: texture },
+        displace: { value: 10.0 },
+        multiplier: { value: 100.0 },
+        originX: { value: 0.0 },
+        originY: { value: 0.0 },
+        originZ: { value: 2000.0 },
+        opacity: { value: 0.25 },
+        lineOffset: { value: 48.0 },
+        lineWidth: { value: 12.0 },
+        lineOrientation: { value: 1 },
+        mode: { value: 0 },
+      },
+      vertexShader: RuttEtraShader.vertexShader,
+      fragmentShader: RuttEtraShader.fragmentShader,
+      depthWrite: true,
+      depthTest: true,
+      wireframe: true,
+      transparent: true,
+      side: DoubleSide,
+      blending: AdditiveBlending
+    });
+```
+
+## Uniforms
+
+| Uniform         | Type      | Description                              |
+| --------------- | --------- | ---------------------------------------- |
+| map             | sampler2D | texture                                  |
+| displace        | float     | displacement factor                      |
+| multiplier      | float     | displacement multiplier                  |
+| originX         | float     | x coordinate of the origin               |
+| originY         | float     | y coordinate of the origin               |
+| originZ         | float     | z coordinate of the origin               |
+| lineOffset      | float     | offset between lines                     |
+| lineWidth       | float     | thickness of the lines                   |
+| opacity         | float     | overall alpha of the lines               |
+| lineOrientation | int       | 0 for horizontal, 1 for vertical         |
+| mode            | int       | 0 for scanline emulation, 1 for no lines |
+
+## Synth
+
+If all you need is the GLSL shader manipulating a video, the package also exports `Synth`, a `class` that instantiates a three.js `Scene` automatically. All you need is a container `HTMLElement` for `Synth` to inject a `HTMLCanvasElement` and `HTMLVideoElement`. An example of how `Synth` can be setup is available in the repository.
+
+```
+new Synth(canvasContainer, videoElement);
+```
 
 ## Getting Started with Development
 
@@ -44,7 +113,3 @@ The default project is split into two directories found in the `src` directory: 
 `yarn build` builds the project for production. Found in the `dist` directory, the production build optimizes the html, css and javascript and prepares whitelisted components for server side rendering.
 
 Run `yarn preview` to check the production build locally at `http://localhost:4444`.
-
-## Github Actions
-
-A simple workflow for checking files pass lint and format checks is included. This project has been tested with full deployments to GitHub Pages. Readymade itself is developed with this environment. [Check out how Github Actions are configured on Github](https://github.com/readymade-ui/readymade).
