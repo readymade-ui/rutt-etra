@@ -4,6 +4,8 @@ This project includes a GLSL shader that emulates the behavior of the analog Rut
 
 This shader is designed to be used with Three.js and is based on the legacy of the Rutt/Etra video synthesizer. For the full effect, combine this shader with a video texture and effects composer using BloomPass and FXAA. An example is provided in the source code.
 
+Play with the Rutt/Etra GLSL shader at [https://readymade-ui.github.io/rutt-etra/](https://readymade-ui.github.io/rutt-etra/).
+
 ## Install
 
 ```
@@ -72,6 +74,8 @@ If all you need is the GLSL shader manipulating a video, the package also export
 ```
 new Synth(canvasContainer, videoElement);
 ```
+
+A live version of Synth that uses Readymade Controls can be viewed at [https://readymade-ui.github.io/rutt-etra/](https://readymade-ui.github.io/rutt-etra/).
 
 ## Getting Started with Development
 
