@@ -55,17 +55,17 @@ const material = new ShaderMaterial({
 
 | Uniform         | Type      | Description                              |
 | --------------- | --------- | ---------------------------------------- |
-| map             | sampler2D | texture                                  |
-| displace        | float     | displacement factor                      |
-| multiplier      | float     | displacement multiplier                  |
-| originX         | float     | x coordinate of the origin               |
-| originY         | float     | y coordinate of the origin               |
-| originZ         | float     | z coordinate of the origin               |
-| lineOffset      | float     | offset between lines                     |
-| lineWidth       | float     | thickness of the lines                   |
-| opacity         | float     | overall alpha of the lines               |
-| lineOrientation | int       | 0 for horizontal, 1 for vertical         |
+| map             | sampler2D | Texture                                  |
 | mode            | int       | 0 for scanline emulation, 1 for no lines |
+| displace        | float     | Displacement factor                      |
+| multiplier      | float     | Displacement multiplier                  |
+| opacity         | float     | Overall alpha of the lines               |
+| originX         | float     | X coordinate of the displacement origin  |
+| originY         | float     | Y coordinate of the displacement origin  |
+| originZ         | float     | Z coordinate of the displacement origin  |
+| lineOffset      | float     | Offset between lines                     |
+| lineWidth       | float     | Thickness of the lines                   |
+| lineOrientation | int       | 0 for horizontal, 1 for vertical         |
 
 ## Synth
 

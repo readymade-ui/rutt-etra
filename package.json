@@ -36,6 +36,7 @@
         "build:routes": "vite build ./src/client/ --outDir ../../dist/client --config vite.config.routes.js",
         "build:server": "vite build --outDir dist/server --ssr src/server/index.ts --config vite.config.server.js",
         "build:transmit": "vite build --outDir dist/transmit-server --ssr src/transmit-server/index.ts --config vite.config.server.js",
+        "build:library": "yarn clean:dist && bash ./BUILD.sh",
         "preview": "cross-env NODE_ENV=production node dist/server/index.js",
         "serve": "cross-env NODE_ENV=production node dist/server/index.js",
         "serve:transmit": "cross-env NODE_ENV=production node dist/transmit-server/index.js",
