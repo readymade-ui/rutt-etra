@@ -39,9 +39,15 @@ class HTMLTableElement extends HTMLElement {}
 class HTMLTableCellElement extends HTMLElement {}
 class HTMLTableRowElement extends HTMLElement {}
 class HTMLDivElement extends HTMLElement {}
+class CustomEvent {}
+class MouseEvent {}
+class KeyboardEvent {}
 
 const installShimOnGlobal = (props = {}) => {
   installWindowOnGlobal({
+    CustomEvent,
+    MouseEvent,
+    KeyboardEvent,
     HTMLButtonElement,
     HTMLInputElement,
     HTMLTemplateElement,
